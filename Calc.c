@@ -20,10 +20,8 @@ void remove_spaces(char* s) {
 }
 
 float evalexpression(char expression[]) {
-    //remove_spaces(expression);
-
     float result = 0;
-    int num = 0;
+    float num = 0;
     char op = '+'; // the first number will be added to result to start doing operations on 
 
     for (int i = 0; i < strlen(expression); i++) {
@@ -69,8 +67,13 @@ float evalexpression(char expression[]) {
                 case '-': result -= num; break;
                 case '*': result *= num; break;
                 case '^': result = pow(result, num); break;
-                case '/': result /= num; break;
-                case '%': result = (int)result % num; break;
+                case '/': 
+                    if (num == 0) { // division by zero is an error
+                        printf("Error: Division by zero.\n");
+                        errorFlag = true;
+                        return 0; 
+                    } else { result /= num; break; }
+                case '%': result = (int)result % (int)num; break;
             }
 
             // if the operator is '**' instead of '*' it is a power and needs to be set as such
@@ -94,8 +97,13 @@ float evalexpression(char expression[]) {
         case '-': result -= num; break;
         case '*': result *= num; break;
         case '^': result = pow(result, num); break;
-        case '/': result /= num; break;
-        case '%': result = (int)result % num; break;
+        case '/': 
+            if (num == 0) { // division by zero is an error
+                printf("Error: Division by zero.\n");
+                errorFlag = true;
+                return 0; 
+            } else { result /= num; break; }
+        case '%': result = (int)result % (int)num; break;
     }
 
     return result;
@@ -122,7 +130,7 @@ void test(){
     printf("Assert 9 passed\n");
     assert(evalexpression("((9+6))/((3*1)/(((2+2)))-1)") == -60);
     printf("Assert 10 passed\n");
-    assert(evalexpression("+(-2)*(-3)–((-4)/(+5))") == 6.8);
+    assert(evalexpression("+(-2)*(-3)-((-4)/(+5))") == 6.8);
     printf("Assert 11 passed\n");
     assert(evalexpression("-(+1) + (+2)") == 1);
     printf("Assert 12 passed\n");
@@ -140,12 +148,20 @@ int main() {
     printf("Input please: ");
 
     char expression[100];
-    scanf("%s", expression);  // Correct format specifier for strings
+    if (fgets(expression, sizeof(expression), stdin) != NULL) { // using fgets to handle input with spaces
+        // Remove the trailing newline character, if present
+        size_t len = strlen(expression);
+        if (len > 0 && expression[len - 1] == '\n') {
+            expression[len - 1] = '\0';
+        }
+    }
 
     if (strcmp(expression, "test") == 0) { // if 'test' is entered, run tests
         test();
         return 0;
     }
+
+    remove_spaces(expression); // remove spaces from the expression
 
     float result = evalexpression(expression);
 
