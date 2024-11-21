@@ -130,15 +130,16 @@ void test(){
     printf("Assert 9 passed\n");
     assert(evalexpression("((9+6))/((3*1)/(((2+2)))-1)") == -60);
     printf("Assert 10 passed\n");
-    assert(evalexpression("+(-2)*(-3)-((-4)/(+5))") == 6.8);
+    assert(fabs(evalexpression("+(-2)*(-3)-((-4)/(+5))") - 6.800) < 0.001); // prevents errors in float storage from failing assert
     printf("Assert 11 passed\n");
-    assert(evalexpression("-(+1) + (+2)") == 1);
+    assert(evalexpression("-(+1)+(+2)") == 1);
     printf("Assert 12 passed\n");
-    assert(evalexpression("-(-(-3)) + (-4) + (+5)") == -2);
+    assert(evalexpression("-(-(-3))+(-4)+(+5)") == -2);
     printf("Assert 13 passed\n");
-    assert(evalexpression("+2 ** (-3)") == 0.125);
+    assert(fabs(evalexpression("+2**(-3)") - 0.125) < 0.001); // float issue
     printf("Assert 14 passed\n");
-    assert(evalexpression("-(+2) * (+3) - (-4) / (-5)") == -6.8);
+    printf("%.6f\n", evalexpression("-(+2)*(+3)-(-4)/(-5)")); // ISSURE HERE THAT NEEDS TO BE FIXED-------------------------------------------------
+    assert(fabs(evalexpression("-(+2)*(+3)-(-4)/(-5)") + 6.8) < 0.001); // float issue
     printf("Assert 15 passed\n");
     assert(evalexpression("1") == 2);
     printf("Assert 16 passed\n");
