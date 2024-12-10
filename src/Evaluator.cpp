@@ -1,5 +1,4 @@
 #include "Evaluator.hpp"
-#include <iostream>
 #include <stack>
 #include <string>
 #include <cmath>
@@ -19,14 +18,16 @@ double Evaluator::performOperation(const string &op, double a, double b = 0) {
     }
     if (op == "%") {
         if (b == 0) throw std::runtime_error("Modulo by zero");
-        return std::fmod(a, b);
+        double result = std::fmod(a, b);
+        if (result < 0) result += b;
+        return result;
     }
     if (op == "^") return std::pow(a, b);
     throw std::runtime_error("Invalid operator: " + op);
 }
 
 double Evaluator::PerformUnaryExpression(const string &op, double operand) {
-    if (op == "-u") return -operand; // Unary minus
+    if (op == "n") return -operand; // Unary minus
     if (op == "+u") return operand;  // Unary plus
     throw std::runtime_error("Invalid unary operator: " + op);
 }
@@ -42,7 +43,7 @@ float Evaluator::evalexpression(const string &expression) {
     while (ss >> token) {
         if (isdigit(token[0]) || (token[0] == '.' && token.size() > 1)) {
             s.push(stod(token));
-        } else if (token == "-u" || token == "+u") {
+        } else if (token == "n" || token == "+u") {
             if (s.empty()) throw std::runtime_error("Invalid expression: Unary operator without operand");
             double operand = s.top(); s.pop();
             s.push(PerformUnaryExpression(token, operand));

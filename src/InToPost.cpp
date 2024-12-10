@@ -1,6 +1,5 @@
 #include "InToPost.hpp"
 #include <queue>
-#include <iostream>
 #include <stack>
 #include <string>
 #include <algorithm>  // For removing spaces (std::remove)
@@ -14,7 +13,7 @@ int InToPost::precedence(char op) {
         return 2;
     if (op == '^')
         return 3;
-    if (op == 'u') 
+    if (op == 'u' || op == 'n') 
         return 4; // Unary operators have the highest precedence
     return 0;
 }
@@ -61,6 +60,7 @@ string InToPost::infixToPostfix(string infix) {
             if (expectUnary) {
                 // Treat as unary
                 string unary = string(1, c) + "u"; // Convert to "+u" or "-u"
+                if (unary == "-u") unary = "n";
                 operators.push(unary);
             } else {
                 // Treat as binary
