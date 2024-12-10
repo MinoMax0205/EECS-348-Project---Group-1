@@ -1,4 +1,5 @@
 #include "InToPost.hpp"
+#include <queue>
 #include <iostream>
 #include <stack>
 #include <string>

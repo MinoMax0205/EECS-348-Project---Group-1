@@ -23,7 +23,6 @@ bool areParenthesesBalanced(const std::string &expression) {
 }
 
 int main() {
-    while (1){
     string expression = Input::getInput();
 
      try {
@@ -38,6 +37,5 @@ int main() {
         std::cerr << "Error: Invalid Expression\n";
     } 
     
-    }
     return 0;
 }
